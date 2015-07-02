@@ -88,6 +88,14 @@ remove_files()
 
 case $CMD in
 	install)
+		
+		if ! [ -f /usr/bin/encfs ] ; then
+			echo "ERROR: encfs is required"
+			echo ""
+			echo "Install ecnfs with 'sudo apt-get install encfs'"
+			echo ""
+			exit 3
+		fi
 		# create directories for config files.
 		echo "Creating directories...."
 		mkdir -p "/usr/share/ecryptfs-loader"

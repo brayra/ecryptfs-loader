@@ -12,6 +12,7 @@ EcryptFS Loader makes this rather simple.
 ## Requirements
 
 - ubuntu 12.04 or greater (may work on earlier versions)
+- encfs 
 
 
 ## How to Use
