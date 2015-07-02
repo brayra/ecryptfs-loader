@@ -12,7 +12,6 @@ EcryptFS Loader makes this rather simple.
 ## Requirements
 
 - ubuntu 12.04 or greater (may work on earlier versions)
-- xdotool
 
 
 ## How to Use
@@ -69,7 +68,7 @@ no recovery mechanism.  However, the password can be changed
 later using encfsctl.
 ```
 
-4. If there are no errors, a new folder *my-test* should open. Copy some data to the folder.
+4. If there are no errors, a new folder `my-test` should open. Copy some data to the folder.
 ```
 user@localhost:~$ dpkg -l >my-test/package-listing.txt
 user@localhost:~$ ls my-test
@@ -86,11 +85,6 @@ unKTVYcWatX1MPHJOM4VuEESqdfdStCdDwkWFafajkr3T0
 
 8. On a second double-click it will unmount the directory and the files will be hidden.
 
-## Tests
-
-Verify that the greeter-sendkey script is sending keys to lightdm greeter. Log into the HTPC from another machine via ssh. Make sure the HTPC is at the login screen with no other graphical sessions. type: `sudo /usr/bin/greeter-sendkey 'abc'`
-
-If the current highlighted user has a password, then characters should appear in the password field. If the current user does not have a password, or the password as been entered, type: `sudo /usr/bin/greeter-sendkey -k Return`
 
 ## Contributors
 
