@@ -17,8 +17,23 @@ EcryptFS Loader makes this rather simple.
 ## How to Use
 
 1. Install configuration ecryptfs-loader: `sudo setup.py install`
+
 2. Create a test file:  `touch my-test.ecryptfs`
+
 3. Call the ecryptfs-loader with create option, `ecryptfs-loader -c my-test.ecryptfs`. encfs will emit standard promprts for creating an encrypted directory. In the example below, 'p' for Paranoia mode was selected. Also, a popup password dialog asked for the 
+
+4. If there are no errors, a new folder `my-test` should open. Copy some data to the folder. See SAMPLE OUTPUT 2
+
+5. Now unmount the foler `ecryptfs-loader my-test.ecryptfs`
+
+6. From a graphical file manager (nautilus), double-click the file my-test.ecryptfs. If it is not already assocated with ecryptfs-loader, it may open an editor. If that happens, right-click the file and get properties. From this scdialog, click the open-with tab. On that tab, select EcryptFSLoader and "Set As Default". Try double-click again.
+
+7. A prompt for a password should appear the first time. Once entered correctly, a file browser of the encrypted directory should open.
+
+8. On a second double-click it will unmount the directory and the files will be hidden.
+
+
+### SAMPLE OUTPUT 1
 ```
 user@localhost:~$ touch my-test.ecryptfs 
 user@localhost:~$ ecryptfs-loader -c my-test.ecryptfs 
@@ -64,7 +79,8 @@ You will need to remember this password, as there is absolutely
 no recovery mechanism.  However, the password can be changed
 later using encfsctl.
 ```
-4. If there are no errors, a new folder `my-test` should open. Copy some data to the folder.
+
+### SAMPLE OUTPUT 2
 ```
 user@localhost:~$ dpkg -l >my-test/package-listing.txt
 user@localhost:~$ ls my-test
@@ -72,11 +88,6 @@ package-listing.txt
 user@localhost:~$ ls .my-test/
 unKTVYcWatX1MPHJOM4VuEESqdfdStCdDwkWFafajkr3T0
 ```
-5. Now unmount the foler `ecryptfs-loader my-test.ecryptfs`
-6. From a graphical file manager (nautilus), double-click the file my-test.ecryptfs. If it is not already assocated with ecryptfs-loader, it may open an editor. If that happens, right-click the file and get properties. From this scdialog, click the open-with tab. On that tab, select EcryptFSLoader and "Set As Default". Try double-click again.
-7. A prompt for a password should appear the first time. Once entered correctly, a file browser of the encrypted directory should open.
-8. On a second double-click it will unmount the directory and the files will be hidden.
-
 
 ## Contributors
 
