@@ -20,7 +20,7 @@ EcryptFS Loader makes this rather simple.
 
 2. Create a test file:  `touch my-test.ecryptfs`
 
-3. Call the ecryptfs-loader with create option, `ecryptfs-loader -c my-test.ecryptfs`. encfs will emit standard promprts for creating an encrypted directory. In the example below, 'p' for Paranoia mode was selected. Also, a popup password dialog asked for the 
+3. Call the ecryptfs-loader with create option, `ecryptfs-loader -c my-test.ecryptfs`. encfs will emit standard promprts for creating an encrypted directory. In the example below, 'p' for Paranoia mode was selected. At the end a password is requested. See SAMPLE OUTPUT 1 for an example.
 
 4. If there are no errors, a new folder `my-test` should open. Copy some data to the folder. See SAMPLE OUTPUT 2
 
