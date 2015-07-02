@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="text/ecryptfs">
+    <comment>Ecryptfs Autoloader File</comment>
+    <glob pattern="*.ecryptfs"/>
+  </mime-type>
+</mime-info>

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Terminal=false
+NoDisplay=true
+Type=Application
+Exec=/usr/bin/ecryptfs-loader %f
+MimeType=text/ecryptfs;
+Name=EcryptFSLoader
+Comment=Loader for encfs directories

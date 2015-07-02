@@ -1,0 +1,150 @@
+#!/bin/bash
+# create by Richard A Bray
+PROG=`basename "$0"`
+echo "$PROG"
+
+CREATE=0
+DELAY=10
+USE_DELAY=1
+
+# DEBUG - Send output to home directory
+#exec 1<&-
+#exec 1>~/ecryptfs.out
+#exec 2<&-
+#exec 2>~/ecryptfs.errors
+
+usage()
+{
+echo "
+usage: $PROG [Options]  <file>
+
+   Mount and/or Create an encrypted directory. 
+
+   -c          : create new encrypted directory if it is missing
+   -d <delay>  : Number of minutes to delay before auto-unmounting [default=10]
+   -h          : display this help
+
+   Use <file> name minus .ecryptfs extension as name of encrypted directory. 
+
+	 If the directory does not exist, create it. NOTE: this will follow standard encfs
+   creation steps. Askiing what type of encryption to use, and what is the 
+   passphrase for the new encrypted directory.
+
+	 Example: create a file named 
+		> touch my-private-files.ecryptfs
+    > $PROG -c my-private-files.ecryptfs
+
+		A directory named .my-private-files will be created in the same parent directory.
+    Also, a new directory named my-private-files will be created and the encrypted
+    directory will me mounted to that directory
+
+"
+}
+
+while getopts ":cDd:h" opt; do
+	case $opt in
+		c ) CREATE=1 
+				;;
+		d ) 
+			X=$(( ${OPTARG} + 0 ))
+			if [ $x -gt 0 ] ; then
+         DELAY=$X
+			else
+				echo "ERROR: Invalid value for delay: ${OPTARG}" >&2
+				echo "" >&2
+				usage
+        exit 3
+      fi
+			;;
+    D ) USE_DELAY=0 ;;
+		h ) usage 
+				exit 1 
+				;;
+		\?) usage 
+				exit 1
+				;;
+	esac
+done
+shift $(($OPTIND -1))
+
+if [ $# -lt 1 ] ; then
+	echo "ERROR: filename must be included" >&2
+	echo "" >&2
+	usage
+	exit 4
+fi
+
+FILENAME="$1"
+BASE=`basename "$FILENAME"`
+NAME=${BASE%.ecryptfs}
+echo $NAME
+
+if [ "${NAME}" = "${BASE}" ] ; then
+	echo "ERROR: This script name must end in '.ecryptfs'" >&2
+	echo "" >&2
+	usage
+	exit 1
+fi
+
+#Get default names
+# The name of this script should be <sharename>.ecryptfs
+# The name of share should be the name of this file with an '.' in 
+# front to make it a hidden directory
+# remove the ecryptfs file extension from the name
+REALSHELL=`readlink -f "$FILENAME"`
+#echo $REALSHELL
+# absolute path to this directory
+SRC=`dirname "$REALSHELL"`
+#echo $SRC
+cd "$SRC"
+pwd
+# should be location of the share directory
+SAFE_ENC="$SRC/.$NAME"
+SAFE="$SRC/$NAME"
+echo "SAFE_ENC=$SAFE_ENC"
+echo "SAFE=$SAFE"
+
+if ! [ -d ".$NAME" ] ; then
+	if [ $CREATE -eq 0 ] ; then
+		echo "ERROR: Encrypted directory is missing." >&2
+		exit 1
+	else
+		echo "Will attempt to create encrypted directory"
+	fi
+fi
+
+# check to see if it is already mounted
+MOUNTS=`mount`
+echo "Mount Directory"
+ALREADY_MOUNTED=`echo "$MOUNTS"|grep "encfs on $SAFE"|wc -l`
+
+if [ $ALREADY_MOUNTED -eq 1 ] ; then
+	echo "Unmount Directory"
+	fusermount -u "$SAFE"
+	rmdir "$SAFE" >/dev/null 2>&1
+else
+
+  # create/mount directory
+	mkdir "$SAFE" >/dev/null  2>&1
+	if ! [ -d "$SAFE" ] ; then
+		echo "ERROR: Unable to create mount point ($SAFE)" >&2
+	fi
+	if [ -d "$SAFE" ] ; then
+		EXISTS=1
+	else
+		EXISTS=0
+	fi
+	
+	I_VAL=""
+	[ $USE_DELAY -gt 0 ] && I_VAL="-i $DELAY"
+	
+
+	encfs --extpass=ssh-askpass $I_VAL "$SAFE_ENC" "$SAFE"
+	if [ $? -eq 0 ] ; then
+		xdg-open "$SAFE"
+	else
+		rmdir "$SAFE" >/dev/null 2>&1
+	fi
+fi
+
+
